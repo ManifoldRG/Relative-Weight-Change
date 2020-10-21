@@ -14,6 +14,8 @@ from delta import setup_delta_tracking
 
 def run_experiment(model_name, training_type, configs):
 
+    print("CONFIGS: ", configs)
+
     # set seed for reproducibility.
     seed = configs.seed
     random.seed(seed)
@@ -69,7 +71,7 @@ def run_experiment(model_name, training_type, configs):
         model, model_name, training_type)
 
     # train model
-    mse_delta_dict, mae_delta_dict, rmae_delta_dict = training(configs.epochs, loaders, model, model_name,
+    mse_delta_dict, mae_delta_dict, rmae_delta_dict = training(epochs, loaders, model, model_name,
                                                                optimizer, criterion, prev_list,
                                                                mse_delta_dict, mae_delta_dict,
                                                                rmae_delta_dict, layer_names, training_type, configs)
