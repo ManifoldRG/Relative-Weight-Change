@@ -86,7 +86,7 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
 
         print(
             f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Acc: {train_acc}% \tTest Loss: {test_loss} \tTest Acc: {test_acc}%")
-        if float(test_acc) >= 93.0:
+        if float(test_acc) >= configs.target_val_acc:
             break
 
         lr_scheduler.step()
