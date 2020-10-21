@@ -7,6 +7,10 @@ from delta import compute_delta
 def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list,
              mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names, training_type):
 
+    """
+    Performs training and evaluation.
+    """
+
     # lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
     #                                                     milestones=[150, 250])
     min_test_loss = np.Inf
@@ -50,6 +54,7 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
         train_loss = round(train_loss/len(loaders['train'].dataset), 4)
         train_acc = round(((train_correct/train_total) * 100.0), 4)
 
+        # compute layer deltas after epoch.
         mse_delta_dict, mae_delta_dict, rmae_delta_dict, prev_list = compute_delta(model, model_name,
                                                                                    layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type)
 
