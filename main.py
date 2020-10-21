@@ -12,9 +12,9 @@ from data import load_cifar10
 from delta import setup_delta_tracking
 
 
-def run_experiment(model_name, training_type, configs):
+def run_experiment(epochs, model_name, training_type, configs):
 
-    print("CONFIGS: ", configs)
+    print(epochs, "CONFIGS: ", configs)
 
     # set seed for reproducibility.
     seed = configs.seed
