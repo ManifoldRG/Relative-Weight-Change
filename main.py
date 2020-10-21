@@ -2,18 +2,29 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 from torchvision.models.vgg import vgg19
-
+import random
+import numpy as np
+import torch
 from model import ResNet18
-import vgg
+from vgg import vgg19_bn
 from train import training
 from data import load_cifar10
 from delta import setup_delta_tracking
 
 
-def run_experiment(epochs, model_name, training_type):
+def run_experiment(epochs, model_name, training_type, configs):
+
+    # set seed for reproducibility.
+    seed = configs.seed
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    # gpu training specific seed settings.
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
     # load data
-    loaders = load_cifar10()
+    loaders = load_cifar10(configs)
 
     # pick model
     if model_name == "Resnet18":
@@ -39,7 +50,7 @@ def run_experiment(epochs, model_name, training_type):
                 nn.Linear(512, 10),
             )
         elif training_type == "no_pretrain":
-            model = torchvision.models.vgg19()
+            model = vgg19_bn()
 
     else:
         print("Please provide a model")
@@ -49,9 +60,9 @@ def run_experiment(epochs, model_name, training_type):
     # loss
     criterion = nn.CrossEntropyLoss().cuda()
     # optimizer
-    optimizer = optim.SGD(model.parameters(), 0.05,
-                          momentum=0.9,
-                          weight_decay=5e-4)
+    optimizer = optim.SGD(model.parameters(), configs.lr,
+                          momentum=configs.momentum,
+                          weight_decay=configs.weight_decay)
 
     # get tracking dictionaries
     prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names = setup_delta_tracking(
@@ -61,6 +72,6 @@ def run_experiment(epochs, model_name, training_type):
     mse_delta_dict, mae_delta_dict, rmae_delta_dict = training(epochs, loaders, model, model_name,
                                                                optimizer, criterion, prev_list,
                                                                mse_delta_dict, mae_delta_dict,
-                                                               rmae_delta_dict, layer_names, training_type)
+                                                               rmae_delta_dict, layer_names, training_type, configs)
 
     return mse_delta_dict, mae_delta_dict, rmae_delta_dict

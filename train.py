@@ -5,10 +5,14 @@ from delta import compute_delta
 
 
 def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list,
-             mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names, training_type):
+             mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names, training_type, configs):
 
     # lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
     #                                                     milestones=[150, 250])
+
+    lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
+        optimizer, max_lr=configs.lr, steps_per_epoch=len(loaders['train'])//configs.batch_size, epochs=epochs)
+
     min_test_loss = np.Inf
 
     for epoch in range(1, epochs+1):
@@ -85,6 +89,6 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
         if float(test_acc) >= 93.0:
             break
 
-        # lr_scheduler.step()
+        lr_scheduler.step()
 
     return mse_delta_dict, mae_delta_dict, rmae_delta_dict
