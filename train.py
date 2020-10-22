@@ -5,17 +5,16 @@ from delta import compute_delta
 
 
 def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list,
-             mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names, training_type, configs):
-
+             mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names, training_type, configs, experiment):
     """
     Performs training and evaluation.
     """
 
-    # lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
-    #                                                     milestones=[150, 250])
+    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
+                                                        milestones=[150, 250])
 
-    lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
-        optimizer, max_lr=configs.lr, steps_per_epoch=len(loaders['train'])//configs.batch_size, epochs=epochs)
+    # lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
+    #     optimizer, max_lr=configs.lr, steps_per_epoch=len(loaders['train'])//configs.batch_size, epochs=epochs)
 
     min_test_loss = np.Inf
 
@@ -57,10 +56,19 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
 
         train_loss = round(train_loss/len(loaders['train'].dataset), 4)
         train_acc = round(((train_correct/train_total) * 100.0), 4)
+        experiment.log_metric("Train Acc", train_acc, epoch=epoch)
+        experiment.log_metric("Train Loss", train_loss, epoch=epoch)
 
         # compute layer deltas after epoch.
         mse_delta_dict, mae_delta_dict, rmae_delta_dict, prev_list = compute_delta(model, model_name,
                                                                                    layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type)
+
+        # log the weight change
+        print(
+            f"At epoch: {epoch}... Logging RMAE of length: {len(rmae_delta_dict)} in COMET...")
+        for layer in rmae_delta_dict:
+            for _, delta in enumerate(rmae_delta_dict[layer]):
+                experiment.log_metric(str(layer), delta, epoch=epoch)
 
         model.eval()
         with torch.no_grad():
@@ -88,6 +96,8 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
 
         test_loss = round(test_loss/len(loaders['test'].dataset), 4)
         test_acc = round(((test_correct/test_total) * 100), 4)
+        experiment.log_metric("Test Acc", test_acc, epoch=epoch)
+        experiment.log_metric("Test Loss", test_loss, epoch=epoch)
 
         print(
             f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Acc: {train_acc}% \tTest Loss: {test_loss} \tTest Acc: {test_acc}%")
