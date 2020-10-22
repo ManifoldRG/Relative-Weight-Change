@@ -1,8 +1,8 @@
+from comet_ml import experiment
 import numpy as np
 
 
 def mse(prev, curr):
-
     """
     Computes L2 norm.
     """
@@ -30,7 +30,6 @@ def mae(prev, curr):
 
 
 def rmae(prev, curr):
-
     """
     Computes Reltaive L1 norm.
     """
@@ -78,8 +77,7 @@ def setup_delta_tracking(model, model_name, training_type):
     return prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names
 
 
-def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type):
-
+def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type, experiment, epoch):
     """
     This computes the deltas for the experiment.
     """
@@ -108,6 +106,11 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
         mae_delta_dict[layer].append(layer_mae_delta)
         rmae_delta_dict[layer].append(layer_rmae_delta)
 
+        # log the weight change
+        print(
+            f"At epoch: {epoch}... Logging RMAE in COMET...")
+        experiment.log_metric(str(layer), layer_rmae_delta, epoch=epoch)
+
     # update previous.
     prev_list = curr_list.copy()
 
@@ -115,7 +118,6 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
 
 
 def load_layers_resnet(model, pretrained=False):
-
     """
     This loads the layer weights for resnet.
     """
@@ -171,11 +173,9 @@ def load_layers_resnet(model, pretrained=False):
 
 
 def load_layers_vgg(model):
-
     """
     This loads the layer weights for vgg.
     """
-
 
     layer_list = []
 

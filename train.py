@@ -61,14 +61,7 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
 
         # compute layer deltas after epoch.
         mse_delta_dict, mae_delta_dict, rmae_delta_dict, prev_list = compute_delta(model, model_name,
-                                                                                   layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type)
-
-        # log the weight change
-        print(
-            f"At epoch: {epoch}... Logging RMAE of length: {len(rmae_delta_dict)} in COMET...")
-        for layer in rmae_delta_dict:
-            for _, delta in enumerate(rmae_delta_dict[layer]):
-                experiment.log_metric(str(layer), delta, epoch=epoch)
+                                                                                   layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type, experiment, epoch)
 
         model.eval()
         with torch.no_grad():
