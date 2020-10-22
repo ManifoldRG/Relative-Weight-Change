@@ -179,24 +179,28 @@ def load_layers_vgg(model):
 
     layer_list = []
 
-    layer_list.append(model.features[0].weight.data.cpu().numpy())
-    layer_list.append(model.features[3].weight.data.cpu().numpy())
-    layer_list.append(model.features[7].weight.data.cpu().numpy())
-    layer_list.append(model.features[10].weight.data.cpu().numpy())
-    layer_list.append(model.features[14].weight.data.cpu().numpy())
-    layer_list.append(model.features[17].weight.data.cpu().numpy())
-    layer_list.append(model.features[20].weight.data.cpu().numpy())
-    layer_list.append(model.features[23].weight.data.cpu().numpy())
-    layer_list.append(model.features[27].weight.data.cpu().numpy())
-    layer_list.append(model.features[30].weight.data.cpu().numpy())
-    layer_list.append(model.features[33].weight.data.cpu().numpy())
-    layer_list.append(model.features[36].weight.data.cpu().numpy())
-    layer_list.append(model.features[40].weight.data.cpu().numpy())
-    layer_list.append(model.features[43].weight.data.cpu().numpy())
-    layer_list.append(model.features[46].weight.data.cpu().numpy())
-    layer_list.append(model.features[49].weight.data.cpu().numpy())
-    layer_list.append(model.classifier[0].weight.data.cpu().numpy())
-    layer_list.append(model.classifier[3].weight.data.cpu().numpy())
-    layer_list.append(model.classifier[6].weight.data.cpu().numpy())
+    # layer_list.append(model.features[0].weight.data.cpu().numpy())
+    # layer_list.append(model.features[3].weight.data.cpu().numpy())
+    # layer_list.append(model.features[7].weight.data.cpu().numpy())
+    # layer_list.append(model.features[10].weight.data.cpu().numpy())
+    # layer_list.append(model.features[14].weight.data.cpu().numpy())
+    # layer_list.append(model.features[17].weight.data.cpu().numpy())
+    # layer_list.append(model.features[20].weight.data.cpu().numpy())
+    # layer_list.append(model.features[23].weight.data.cpu().numpy())
+    # layer_list.append(model.features[27].weight.data.cpu().numpy())
+    # layer_list.append(model.features[30].weight.data.cpu().numpy())
+    # layer_list.append(model.features[33].weight.data.cpu().numpy())
+    # layer_list.append(model.features[36].weight.data.cpu().numpy())
+    # layer_list.append(model.features[40].weight.data.cpu().numpy())
+    # layer_list.append(model.features[43].weight.data.cpu().numpy())
+    # layer_list.append(model.features[46].weight.data.cpu().numpy())
+    # layer_list.append(model.features[49].weight.data.cpu().numpy())
+    # layer_list.append(model.classifier[0].weight.data.cpu().numpy())
+    # layer_list.append(model.classifier[3].weight.data.cpu().numpy())
+    # layer_list.append(model.classifier[6].weight.data.cpu().numpy())
+
+    for name, param in model.named_parameters():
+        if len(param.size()) > 1:
+        layer_list.append(param.clone().data.cpu().numpy())
 
     return layer_list
