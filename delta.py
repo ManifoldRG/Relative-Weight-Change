@@ -91,7 +91,9 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
     elif model_name == "VGG19":
         curr_list = load_layers_vgg(model)
 
-    # update dictionaries with deltas.
+    # update dictionaries with deltas.\
+    print(
+        f"At epoch: {epoch}... Logging RMAE in COMET...")
     for i, layer in zip(range(len(prev_list)), layer_names):
 
         # compute L2.
@@ -107,8 +109,6 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
         rmae_delta_dict[layer].append(layer_rmae_delta)
 
         # log the weight change
-        print(
-            f"At epoch: {epoch}... Logging RMAE in COMET...")
         experiment.log_metric(str(layer), layer_rmae_delta, epoch=epoch)
 
     # update previous.
