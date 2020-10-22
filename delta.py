@@ -201,6 +201,6 @@ def load_layers_vgg(model):
 
     for name, param in model.named_parameters():
         if len(param.size()) > 1:
-        layer_list.append(param.clone().data.cpu().numpy())
+            layer_list.append(param.clone().data.cpu().numpy())
 
     return layer_list
