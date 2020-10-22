@@ -55,4 +55,6 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
                                                                mse_delta_dict, mae_delta_dict,
                                                                rmae_delta_dict, layer_names, training_type, configs, experiment)
 
-    return mse_delta_dict, mae_delta_dict, rmae_delta_dict, experiment
+    experiment.end()
+
+    return mse_delta_dict, mae_delta_dict, rmae_delta_dict
