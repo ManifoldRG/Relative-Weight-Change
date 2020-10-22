@@ -5,7 +5,7 @@ import torch.nn as nn
 import torchvision
 
 from model import ResNet18
-from vgg import vgg19_bn
+import vgg
 
 
 def plot_deltas(delta_dict, model_name, save_name):
@@ -58,7 +58,7 @@ def load_model(model_name, training_type):
                 nn.Linear(512, 10),
             )
         elif training_type == "no_pretrain":
-            model = vgg19_bn()
+            model = vgg.__dict__['vgg19_bn'](num_classes=10)
 
     else:
         print("Please provide a model")

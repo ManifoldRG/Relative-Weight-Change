@@ -11,7 +11,7 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
     """
 
     lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
-                                                        milestones=[150, 250])
+                                                        milestones=configs.lr_sched_milestone, gamma=0.1)
 
     # lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
     #     optimizer, max_lr=configs.lr, steps_per_epoch=len(loaders['train'])//configs.batch_size, epochs=epochs)
