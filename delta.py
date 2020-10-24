@@ -1,8 +1,8 @@
+from comet_ml import experiment
 import numpy as np
 
 
 def mse(prev, curr):
-
     """
     Computes L2 norm.
     """
@@ -30,7 +30,6 @@ def mae(prev, curr):
 
 
 def rmae(prev, curr):
-
     """
     Computes Reltaive L1 norm.
     """
@@ -78,8 +77,7 @@ def setup_delta_tracking(model, model_name, training_type):
     return prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names
 
 
-def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type):
-
+def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type, experiment, epoch):
     """
     This computes the deltas for the experiment.
     """
@@ -93,7 +91,9 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
     elif model_name == "VGG19":
         curr_list = load_layers_vgg(model)
 
-    # update dictionaries with deltas.
+    # update dictionaries with deltas.\
+    print(
+        f"At epoch: {epoch}... Logging RMAE in COMET...")
     for i, layer in zip(range(len(prev_list)), layer_names):
 
         # compute L2.
@@ -108,6 +108,9 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
         mae_delta_dict[layer].append(layer_mae_delta)
         rmae_delta_dict[layer].append(layer_rmae_delta)
 
+        # log the weight change
+        experiment.log_metric(str(layer), layer_rmae_delta, epoch=epoch)
+
     # update previous.
     prev_list = curr_list.copy()
 
@@ -115,7 +118,6 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
 
 
 def load_layers_resnet(model, pretrained=False):
-
     """
     This loads the layer weights for resnet.
     """
@@ -171,32 +173,34 @@ def load_layers_resnet(model, pretrained=False):
 
 
 def load_layers_vgg(model):
-
     """
     This loads the layer weights for vgg.
     """
 
-
     layer_list = []
 
-    layer_list.append(model.features[0].weight.data.cpu().numpy())
-    layer_list.append(model.features[2].weight.data.cpu().numpy())
-    layer_list.append(model.features[5].weight.data.cpu().numpy())
-    layer_list.append(model.features[7].weight.data.cpu().numpy())
-    layer_list.append(model.features[10].weight.data.cpu().numpy())
-    layer_list.append(model.features[12].weight.data.cpu().numpy())
-    layer_list.append(model.features[14].weight.data.cpu().numpy())
-    layer_list.append(model.features[16].weight.data.cpu().numpy())
-    layer_list.append(model.features[19].weight.data.cpu().numpy())
-    layer_list.append(model.features[21].weight.data.cpu().numpy())
-    layer_list.append(model.features[23].weight.data.cpu().numpy())
-    layer_list.append(model.features[25].weight.data.cpu().numpy())
-    layer_list.append(model.features[28].weight.data.cpu().numpy())
-    layer_list.append(model.features[30].weight.data.cpu().numpy())
-    layer_list.append(model.features[32].weight.data.cpu().numpy())
-    layer_list.append(model.features[34].weight.data.cpu().numpy())
-    layer_list.append(model.classifier[0].weight.data.cpu().numpy())
-    layer_list.append(model.classifier[3].weight.data.cpu().numpy())
-    layer_list.append(model.classifier[6].weight.data.cpu().numpy())
+    # layer_list.append(model.features[0].weight.data.cpu().numpy())
+    # layer_list.append(model.features[3].weight.data.cpu().numpy())
+    # layer_list.append(model.features[7].weight.data.cpu().numpy())
+    # layer_list.append(model.features[10].weight.data.cpu().numpy())
+    # layer_list.append(model.features[14].weight.data.cpu().numpy())
+    # layer_list.append(model.features[17].weight.data.cpu().numpy())
+    # layer_list.append(model.features[20].weight.data.cpu().numpy())
+    # layer_list.append(model.features[23].weight.data.cpu().numpy())
+    # layer_list.append(model.features[27].weight.data.cpu().numpy())
+    # layer_list.append(model.features[30].weight.data.cpu().numpy())
+    # layer_list.append(model.features[33].weight.data.cpu().numpy())
+    # layer_list.append(model.features[36].weight.data.cpu().numpy())
+    # layer_list.append(model.features[40].weight.data.cpu().numpy())
+    # layer_list.append(model.features[43].weight.data.cpu().numpy())
+    # layer_list.append(model.features[46].weight.data.cpu().numpy())
+    # layer_list.append(model.features[49].weight.data.cpu().numpy())
+    # layer_list.append(model.classifier[0].weight.data.cpu().numpy())
+    # layer_list.append(model.classifier[3].weight.data.cpu().numpy())
+    # layer_list.append(model.classifier[6].weight.data.cpu().numpy())
+
+    for name, param in model.named_parameters():
+        if len(param.size()) > 1:
+            layer_list.append(param.clone().data.cpu().numpy())
 
     return layer_list

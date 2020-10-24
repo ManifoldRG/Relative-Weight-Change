@@ -1,15 +1,18 @@
 import itertools
+
 import matplotlib.pyplot as plt
-from model import ResNet18
+import torch.nn as nn
 import torchvision
-# from torchvision.models.vgg import vgg19
-from vgg import vgg19
+
+from model import ResNet18
+import vgg
+
 
 def plot_deltas(delta_dict, model_name, save_name):
     """Basic plotting function.
      Don't need this anymore.
     """
-    
+
     marker = itertools.cycle(('.', '$...$', "v", "1", "8", "s", "p",
                               "P", "*", "+", "x", "d", "_", 4, 5, "D", "H", "3", "<", ">", "^"))
     plt.figure(figsize=(30, 20), dpi=200)
@@ -27,8 +30,7 @@ def plot_deltas(delta_dict, model_name, save_name):
     plt.savefig(save_name)
 
 
-
-load_model(model_name, training_type):
+def load_model(model_name, training_type):
     """
     Loads model.
     """
@@ -56,17 +58,7 @@ load_model(model_name, training_type):
                 nn.Linear(512, 10),
             )
         elif training_type == "no_pretrain":
-            model = torchvision.models.vgg19()
-             model.classifier = nn.Sequential(
-                nn.Linear(512 * 7 * 7, 512),
-                nn.ReLU(True),
-                nn.Dropout(),
-                nn.Linear(512, 512),
-                nn.ReLU(True),
-                nn.Dropout(),
-                nn.Linear(512, 512),
-                nn.ReLU(True),
-                nn.Linear(512, 10),
+            model = vgg.__dict__['vgg19_bn'](num_classes=10)
 
     else:
         print("Please provide a model")
