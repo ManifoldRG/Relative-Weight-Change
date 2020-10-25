@@ -61,6 +61,7 @@ def load_model(model_name, training_type):
         elif training_type == "no_pretrain":
             model = vgg.__dict__['vgg19_bn'](num_classes=10)
     elif model_name == 'Vanilla':
+        print("Loading Vanillaa")
         model = VanillaCNN2()
     else:
         print("Please provide a model")
