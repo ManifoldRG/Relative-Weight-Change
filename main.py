@@ -16,7 +16,7 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
     print(epochs, "CONFIGS: ", configs)
 
     experiment = Experiment(api_key=configs.api_key,
-                            project_name="relative-weight-change", workspace="ayushm-agrawal")
+                            project_name=configs.project_name, workspace="ayushm-agrawal")
 
     experiment.set_name(exp_name)
 
