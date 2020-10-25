@@ -92,6 +92,8 @@ def compute_delta(model, model_name, layer_names, prev_list, mse_delta_dict, mae
             curr_list = load_layers_resnet(model, pretrained=False)
     elif model_name == "VGG19":
         curr_list = load_layers_vgg(model)
+    elif model_name == 'Vanilla':
+        curr_list = load_layers_vanilla(model)
 
     # update dictionaries with deltas.\
     print(
