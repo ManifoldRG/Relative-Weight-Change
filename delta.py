@@ -60,6 +60,8 @@ def setup_delta_tracking(model, model_name, training_type):
             prev_list = load_layers_resnet(model, pretrained=False)
     elif model_name == "VGG19":
         prev_list = load_layers_vgg(model)
+    elif model_name == 'Vanilla':
+        prev_list = load_layers_vanilla(model)
 
     # setup tracking dictionaries
     mse_delta_dict, mae_delta_dict, rmae_delta_dict = {}, {}, {}
@@ -200,6 +202,16 @@ def load_layers_vgg(model):
     # layer_list.append(model.classifier[6].weight.data.cpu().numpy())
 
     for name, param in model.named_parameters():
+        if len(param.size()) > 1:
+            layer_list.append(param.clone().data.cpu().numpy())
+
+    return layer_list
+
+
+def load_layers_vanilla(model):
+    layer_list = []
+
+    for _, param in model.named_parameters():
         if len(param.size()) > 1:
             layer_list.append(param.clone().data.cpu().numpy())
 
