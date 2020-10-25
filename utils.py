@@ -5,6 +5,7 @@ import torch.nn as nn
 import torchvision
 
 from model import ResNet18
+from vanilla import VanillaCNN2
 import vgg
 
 
@@ -59,7 +60,8 @@ def load_model(model_name, training_type):
             )
         elif training_type == "no_pretrain":
             model = vgg.__dict__['vgg19_bn'](num_classes=10)
-
+    elif model_name == 'Vanilla':
+        model = VanillaCNN2()
     else:
         print("Please provide a model")
 
