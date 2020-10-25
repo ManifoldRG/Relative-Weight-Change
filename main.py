@@ -50,11 +50,11 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
         model, model_name, training_type)
 
     # train model
-    mse_delta_dict, mae_delta_dict, rmae_delta_dict = training(epochs, loaders, model, model_name,
-                                                               optimizer, criterion, prev_list,
-                                                               mse_delta_dict, mae_delta_dict,
-                                                               rmae_delta_dict, layer_names, training_type, configs, experiment)
+    mse_delta_dict, mae_delta_dict, rmae_delta_dict, train_acc_arr, test_acc_arr = training(epochs, loaders, model, model_name,
+                                                                                            optimizer, criterion, prev_list,
+                                                                                            mse_delta_dict, mae_delta_dict,
+                                                                                            rmae_delta_dict, layer_names, training_type, configs, experiment)
 
     experiment.end()
 
-    return mse_delta_dict, mae_delta_dict, rmae_delta_dict
+    return mse_delta_dict, mae_delta_dict, rmae_delta_dict, train_acc_arr, test_acc_arr

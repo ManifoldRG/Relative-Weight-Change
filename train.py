@@ -18,6 +18,8 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
 
     min_test_loss = np.Inf
 
+    train_acc_arr, test_acc_arr = [], []
+
     for epoch in range(1, epochs+1):
 
         train_loss = 0.0
@@ -92,6 +94,9 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
         experiment.log_metric("Test Acc", test_acc, epoch=epoch)
         experiment.log_metric("Test Loss", test_loss, epoch=epoch)
 
+        train_acc_arr.append(train_acc)
+        test_acc_arr.append(test_acc)
+
         print(
             f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Acc: {train_acc}% \tTest Loss: {test_loss} \tTest Acc: {test_acc}%")
         if float(test_acc) >= configs.target_val_acc:
@@ -99,4 +104,4 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
 
         lr_scheduler.step()
 
-    return mse_delta_dict, mae_delta_dict, rmae_delta_dict
+    return mse_delta_dict, mae_delta_dict, rmae_delta_dict, np.asarray(train_acc_arr), np.asarray(test_acc_arr)
