@@ -4,7 +4,7 @@
 #SBATCH --mem=0
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:1
-#SBATCH --constraint='gpu_p100&gpu_v100'
+#SBATCH --constraint='gpu_v100'
 #SBATCH --job-name=mnist_resnet_baseline
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
