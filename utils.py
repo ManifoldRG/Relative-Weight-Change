@@ -31,7 +31,7 @@ def plot_deltas(delta_dict, model_name, save_name):
     plt.savefig(save_name)
 
 
-def load_model(model_name, training_type):
+def load_model(model_name, training_type, configs):
     """
     Loads model.
     """
@@ -39,10 +39,17 @@ def load_model(model_name, training_type):
     if model_name == "Resnet18":
         # load weights
         if training_type == "pretrained":
+
             model = torchvision.models.resnet18(pretrained=True)
             model.fc.Linear = nn.Linear(model.fc.in_features, 10)
+
         elif training_type == "no_pretrain":
-            model = ResNet18()
+
+            if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+                model = ResNet18(input_channels=1)
+            else:
+                model = ResNet18()
+
     elif model_name == "VGG19":
         # load weights
         if training_type == "pretrained":

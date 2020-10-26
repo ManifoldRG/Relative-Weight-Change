@@ -4,7 +4,7 @@ import random
 import numpy as np
 import torch
 from train import training
-from data import load_cifar10
+from data import load_dataset
 from delta import setup_delta_tracking
 from utils import load_model
 from comet_ml import Experiment
@@ -32,10 +32,10 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
     torch.backends.cudnn.benchmark = False
 
     # load data
-    loaders = load_cifar10(configs)
+    loaders = load_dataset(configs)
 
     # load model
-    model = load_model(model_name, training_type)
+    model = load_model(model_name, training_type, configs)
 
     # loss
     criterion = nn.CrossEntropyLoss().cuda()
