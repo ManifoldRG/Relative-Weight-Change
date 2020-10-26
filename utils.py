@@ -3,6 +3,7 @@ import itertools
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torchvision
+import torch
 
 from model import ResNet18
 from vanilla import VanillaCNN2
@@ -74,7 +75,10 @@ def load_model(model_name, training_type, configs):
         print("Please provide a model")
 
     # push model to cuda
-    model = model.cuda()
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
+        print("\nModel moved to Data Parallel")
+    model.cuda()
 
     return model
 
@@ -93,7 +97,7 @@ def freeze_resnet_1(model):
     model.layer2[1].conv2.weight.requires_grad = False
 
 def freeze_resnet_2(model, epoch):
-    
+
     if epoch == 20:
         model.conv1.weight.requires_grad = False
         model.layer1[0].conv1.weight.requires_grad = False
