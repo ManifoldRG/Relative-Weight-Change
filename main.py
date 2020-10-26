@@ -46,8 +46,7 @@ def run_experiment(epochs, model_name, training_type, configs):
                           weight_decay=configs.weight_decay)
 
     # get tracking dictionaries
-    prev_list, rmae_delta_dict = setup_delta_tracking(
-        model, model_name, training_type)
+    prev_list, rmae_delta_dict = setup_delta_tracking(model)
 
     # train model
     rmae_delta_dict, train_acc_arr, test_acc_arr = training(epochs, loaders, model, optimizer, criterion, prev_list, rmae_delta_dict, configs, experiment)
