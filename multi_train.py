@@ -13,11 +13,11 @@ def multi_train(configs_path="./configs.json"):
 
     average_train_acc, average_test_acc = np.zeros(configs.epochs), np.zeros(configs.epochs)
 
-    average_exp_name = f"avg_{configs.exp_name}"
+    og_config_exp_name = configs.exp_name
 
     for seed in configs.seed_list:
 
-        configs.exp_name = f"{seed}_{configs.exp_name}"
+        configs.exp_name = f"{seed}_{og_config_exp_name}"
         print(f"Training: {configs.exp_name}")
         
         configs.seed = seed
@@ -36,7 +36,7 @@ def multi_train(configs_path="./configs.json"):
 
     experiment = Experiment(api_key="y8YtCd3TVO7TurC3t1D0LP7Ju",
                             project_name="avg-exp-rwc", workspace="ayushm-agrawal")
-    experiment.set_name(average_exp_name)
+    experiment.set_name(f"avg_{og_config_exp_name}")
 
     for i in range(len(average_train_acc)):
 

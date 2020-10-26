@@ -49,7 +49,7 @@ def load_model(model_name, training_type, configs):
             if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
                 model = ResNet18(input_channels=1)
             else:
-                model = ResNet18()
+                model = ResNet18(input_channels=3)
 
     elif model_name == "VGG19":
         # load weights
