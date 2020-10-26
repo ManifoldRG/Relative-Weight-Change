@@ -2,7 +2,7 @@ import torch
 import numpy as np
 
 from delta import compute_delta
-from utils import freeze_resnet
+from utils import freeze_resnet_1, freeze_resnet_2
 
 
 def training(epochs, loaders, model, optimizer, criterion, prev_list,
