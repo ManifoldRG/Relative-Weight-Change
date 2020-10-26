@@ -5,6 +5,7 @@
     "model_name" : "Resnet18",
     "api_key" : "y8YtCd3TVO7TurC3t1D0LP7Ju",
     "project_name": "baseline-exp-rwc",
+    "dataset" : "MNIST",
     "lr" : 0.1,
     "momentum" : 0.9,
     "weight_decay" : 1e-4,
