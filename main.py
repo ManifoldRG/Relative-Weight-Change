@@ -10,7 +10,7 @@ from utils import load_model
 from comet_ml import Experiment
 
 
-def run_experiment(epochs, model_name, training_type, configs, exp_name):
+def run_experiment(epochs, model_name, training_type, configs):
     """ Runs the basic experiment"""
 
     print(epochs, "CONFIGS: ", configs)
@@ -18,7 +18,7 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
     experiment = Experiment(api_key=configs.api_key,
                             project_name=configs.project_name, workspace="ayushm-agrawal")
 
-    experiment.set_name(exp_name)
+    experiment.set_name(configs.exp_name)
 
     experiment.log_parameters(configs)
 
@@ -46,15 +46,12 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
                           weight_decay=configs.weight_decay)
 
     # get tracking dictionaries
-    prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names = setup_delta_tracking(
+    prev_list, rmae_delta_dict = setup_delta_tracking(
         model, model_name, training_type)
 
     # train model
-    mse_delta_dict, mae_delta_dict, rmae_delta_dict, train_acc_arr, test_acc_arr = training(epochs, loaders, model, model_name,
-                                                                                            optimizer, criterion, prev_list,
-                                                                                            mse_delta_dict, mae_delta_dict,
-                                                                                            rmae_delta_dict, layer_names, training_type, configs, experiment)
+    rmae_delta_dict, train_acc_arr, test_acc_arr = training(epochs, loaders, model, optimizer, criterion, prev_list, rmae_delta_dict, configs, experiment)
 
     experiment.end()
 
-    return mse_delta_dict, mae_delta_dict, rmae_delta_dict, train_acc_arr, test_acc_arr
+    return rmae_delta_dict, train_acc_arr, test_acc_arr

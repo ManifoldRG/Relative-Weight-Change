@@ -77,3 +77,34 @@ def load_model(model_name, training_type, configs):
     model = model.cuda()
 
     return model
+
+def freeze_resnet_1(model):
+
+    model.conv1.weight.requires_grad = False
+    model.layer1[0].conv1.weight.requires_grad = False
+    model.layer1[0].conv2.weight.requires_grad = False
+    model.layer1[1].conv1.weight.requires_grad = False
+    model.layer1[1].conv2.weight.requires_grad = False
+
+    model.layer2[0].conv1.weight.requires_grad = False
+    model.layer2[0].conv2.weight.requires_grad = False
+    model.layer2[0].shortcut[0].weight.requires_grad = False
+    model.layer2[1].conv1.weight.requires_grad = False
+    model.layer2[1].conv2.weight.requires_grad = False
+
+def freeze_resnet_2(model, epoch):
+    
+    if epoch == 20:
+        model.conv1.weight.requires_grad = False
+        model.layer1[0].conv1.weight.requires_grad = False
+        model.layer1[0].conv2.weight.requires_grad = False
+        model.layer1[1].conv1.weight.requires_grad = False
+        model.layer1[1].conv2.weight.requires_grad = False
+
+    if epoch == 40:
+        model.layer2[0].conv1.weight.requires_grad = False
+        model.layer2[0].conv2.weight.requires_grad = False
+        model.layer2[0].shortcut[0].weight.requires_grad = False
+        model.layer2[1].conv1.weight.requires_grad = False
+        model.layer2[1].conv2.weight.requires_grad = False
+

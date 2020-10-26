@@ -1,0 +1,15 @@
+{   
+    "epochs" : 20,
+    "exp_name" : "Baseline_Resnet18_MNIST",
+    "seed_list": [0, 42, 123, 1000, 1234], 
+    "model_name" : "Resnet18",
+    "api_key" : "y8YtCd3TVO7TurC3t1D0LP7Ju",
+    "project_name": "baseline-exp-rwc",
+    "lr" : 0.1,
+    "momentum" : 0.9,
+    "weight_decay" : 1e-4,
+    "batch_size" : 128,
+    "target_val_acc" : 100.0,
+    "freezing_type" : 0,
+    "save_directory" : "/work/netthinker/atendle/MC/baseline/"
+}
