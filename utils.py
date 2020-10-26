@@ -83,7 +83,7 @@ def load_model(model_name, training_type, configs):
     return model
 
 def freeze_resnet_1(model):
-
+    
     model.conv1.weight.requires_grad = False
     model.layer1[0].conv1.weight.requires_grad = False
     model.layer1[0].conv2.weight.requires_grad = False
@@ -96,6 +96,8 @@ def freeze_resnet_1(model):
     model.layer2[1].conv1.weight.requires_grad = False
     model.layer2[1].conv2.weight.requires_grad = False
 
+    print("Freeezing Type-1")
+
 def freeze_resnet_2(model, epoch):
 
     if epoch == 20:
@@ -105,10 +107,14 @@ def freeze_resnet_2(model, epoch):
         model.layer1[1].conv1.weight.requires_grad = False
         model.layer1[1].conv2.weight.requires_grad = False
 
+        print("Freeezing Type-2 at 20 Epochs")
+
     if epoch == 40:
         model.layer2[0].conv1.weight.requires_grad = False
         model.layer2[0].conv2.weight.requires_grad = False
         model.layer2[0].shortcut[0].weight.requires_grad = False
         model.layer2[1].conv1.weight.requires_grad = False
         model.layer2[1].conv2.weight.requires_grad = False
+
+        print("Freeezing Type-2 at 40 Epochs")
 
