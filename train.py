@@ -59,12 +59,21 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
         # compute layer deltas after epoch.
         rmae_delta_dict, prev_list = compute_delta(model, prev_list, rmae_delta_dict, experiment, epoch)
 
-        if configs.freezing_type == 1 and epoch == 10:
-            freeze_resnet_1(model)
+        if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+            if configs.freezing_type == 1 and epoch == 3:
+                freeze_resnet_1(model)
+            
+            if configs.freezing_type == 2:
+                if epoch == 3 or epoch == 5:
+                    freeze_resnet_2(model, epoch)
         
-        if configs.freezing_type == 2:
-            if epoch == 20 or epoch == 40:
-                freeze_resnet_2(model, epoch)
+        else:
+            if configs.freezing_type == 1 and epoch == 10:
+                freeze_resnet_1(model)
+            
+            if configs.freezing_type == 2:
+                if epoch == 20 or epoch == 40:
+                    freeze_resnet_2(model, epoch)
 
         model.eval()
         with torch.no_grad():
