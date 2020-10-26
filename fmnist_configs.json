@@ -1,11 +1,11 @@
 {   
     "epochs" : 20,
-    "exp_name" : "Baseline_Resnet18_MNIST",
+    "exp_name" : "Baseline_Resnet18_FMNIST",
     "seed_list": [0, 42, 123, 1000, 1234], 
     "model_name" : "Resnet18",
     "api_key" : "y8YtCd3TVO7TurC3t1D0LP7Ju",
     "project_name": "baseline-exp-rwc",
-    "dataset" : "MNIST",
+    "dataset" : "FashionMNIST",
     "lr" : 0.1,
     "momentum" : 0.9,
     "weight_decay" : 1e-4,
