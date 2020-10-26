@@ -100,7 +100,7 @@ def freeze_resnet_1(model):
 
 def freeze_resnet_2(model, epoch):
 
-    if epoch == 20 or epochs == 3:
+    if epoch == 20 or epoch == 3:
         model.conv1.weight.requires_grad = False
         model.layer1[0].conv1.weight.requires_grad = False
         model.layer1[0].conv2.weight.requires_grad = False
@@ -109,7 +109,7 @@ def freeze_resnet_2(model, epoch):
 
         print("Freeezing Type-2 at 20 Epochs")
 
-    if epoch == 40 or epochs == 5:
+    if epoch == 40 or epoch == 5:
         model.layer2[0].conv1.weight.requires_grad = False
         model.layer2[0].conv2.weight.requires_grad = False
         model.layer2[0].shortcut[0].weight.requires_grad = False
