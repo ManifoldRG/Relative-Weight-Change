@@ -47,3 +47,5 @@ def multi_train(configs_path="./configs.json"):
 
     print("Done!")
     
+if __name__ == "__main__":
+    multi_train()
