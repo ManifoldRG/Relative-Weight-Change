@@ -77,10 +77,10 @@ class ResNet(nn.Module):
         # change first layer based on dataset
         if input_channels == 3:
             self.conv1 = nn.Conv2d(3, 64, kernel_size=3,
-                                stride=1, padding=1, bias=False)
+                                   stride=1, padding=1, bias=False)
         elif input_channels == 1:
             self.conv1 = nn.Conv2d(1, 64, kernel_size=3,
-                                stride=1, padding=1, bias=False)
+                                   stride=1, padding=1, bias=False)
 
         self.bn1 = nn.BatchNorm2d(64)
         self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)
@@ -109,5 +109,5 @@ class ResNet(nn.Module):
         return out
 
 
-def ResNet18(input_channels):
-    return ResNet(BasicBlock, [2, 2, 2, 2], input_channels=input_channels)
+def ResNet18(num_classes, input_channels):
+    return ResNet(BasicBlock, [2, 2, 2, 2], input_channels=input_channels, num_classes=num_classes)
