@@ -38,7 +38,7 @@ def multi_train(configs_path="./configs.json"):
                             project_name="avg-exp-rwc", workspace="ayushm-agrawal")
     experiment.set_name(average_exp_name)
 
-    for i range(len(average_train_acc)):
+    for i in range(len(average_train_acc)):
 
         experiment.log_metric("Train Acc", average_train_acc[i], epoch=i+1)
         experiment.log_metric("Test Acc", average_test_acc[i], epoch=i+1)
