@@ -48,6 +48,8 @@ def load_model(model_name, training_type, configs):
 
             if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
                 model = ResNet18(input_channels=1)
+            elif configs.dataset == "CIFAR-100":
+                model = ResNet18(num_classes=100, input_channels=3)
             else:
                 model = ResNet18(input_channels=3)
 
@@ -82,8 +84,9 @@ def load_model(model_name, training_type, configs):
 
     return model
 
+
 def freeze_resnet_1(model):
-    
+
     model.conv1.weight.requires_grad = False
     model.layer1[0].conv1.weight.requires_grad = False
     model.layer1[0].conv2.weight.requires_grad = False
@@ -97,6 +100,7 @@ def freeze_resnet_1(model):
     model.layer2[1].conv2.weight.requires_grad = False
 
     print("Freeezing Type-1")
+
 
 def freeze_resnet_2(model, epoch):
 
@@ -117,4 +121,3 @@ def freeze_resnet_2(model, epoch):
         model.layer2[1].conv2.weight.requires_grad = False
 
         print("Freeezing Type-2 at 40 Epochs")
-
