@@ -5,9 +5,10 @@ import torch.nn as nn
 import torchvision
 import torch
 
-from model import ResNet18
-from vanilla import VanillaCNN2
-import vgg
+from models.resnet import ResNet18
+from models.xception import Xception, xception
+from models.vanilla import VanillaCNN2
+import models.vgg as vgg
 
 
 def plot_deltas(delta_dict, model_name, save_name):
@@ -40,12 +41,12 @@ def load_model(model_name, training_type, configs):
     if model_name == "Resnet18":
         # load weights
         if training_type == "pretrained":
-
+            print("Loading pretrained Resnet18")
             model = torchvision.models.resnet18(pretrained=True)
             model.fc.Linear = nn.Linear(model.fc.in_features, 10)
 
-        elif training_type == "no_pretrain":
-
+        elif training_type == "untrained":
+            print("Loading untrained Resnet18")
             if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
                 model = ResNet18(num_classes=10, input_channels=1)
             elif configs.dataset == "CIFAR-100":
@@ -53,9 +54,35 @@ def load_model(model_name, training_type, configs):
             else:
                 model = ResNet18(num_classes=10, input_channels=3)
 
+    elif model == "Xception":
+        # load model with pretrained weights
+        if training_type == "pretrained":
+
+            print("Loading pretrained Xception")
+
+            model = xception()
+            model.fc.Linear = nn.Linear(model.fc.in_features, 10)
+
+        # load model without pretrained weights
+        elif training_type == "untrained":
+
+            print("Loading untrained Xception")
+
+            if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+                model = Xception(num_classes=10, input_channels=1)
+
+            elif configs.dataset == "CIFAR-100":
+                model = Xception(num_classes=100, input_channels=3)
+
+            else:
+                model = Xception(num_classes=10, input_channels=3)
+
     elif model_name == "VGG19":
         # load weights
         if training_type == "pretrained":
+
+            print("Loading pretrained VGG19")
+
             model = torchvision.models.vgg19(pretrained=True)
             model.classifier = nn.Sequential(
                 nn.Linear(512 * 7 * 7, 512),
@@ -68,12 +95,21 @@ def load_model(model_name, training_type, configs):
                 nn.ReLU(True),
                 nn.Linear(512, 10),
             )
-        elif training_type == "no_pretrain":
+
+        elif training_type == "untrained":
+
+            print("Loading untrained VGG19")
+
             model = vgg.__dict__['vgg19_bn'](num_classes=10)
-    elif model_name == 'Vanilla':
-        print("Loading Vanillaa")
+
+    elif model_name == "Vanilla":
+
+        print("Loading Vanilla")
+
         model = VanillaCNN2()
+
     else:
+        
         print("Please provide a model")
 
     # push model to cuda

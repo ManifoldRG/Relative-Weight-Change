@@ -1,4 +1,3 @@
-
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -75,13 +74,8 @@ class ResNet(nn.Module):
         self.in_planes = 64
 
         # change first layer based on dataset
-        if input_channels == 3:
-            self.conv1 = nn.Conv2d(3, 64, kernel_size=3,
+        self.conv1 = nn.Conv2d(input_channels, 64, kernel_size=3,
                                    stride=1, padding=1, bias=False)
-        elif input_channels == 1:
-            self.conv1 = nn.Conv2d(1, 64, kernel_size=3,
-                                   stride=1, padding=1, bias=False)
-
         self.bn1 = nn.BatchNorm2d(64)
         self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
