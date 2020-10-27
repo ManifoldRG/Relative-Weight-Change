@@ -115,7 +115,6 @@ def load_fashionmnist(configs):
     print(test_set.data.shape)
 
     return {'train': train_loader, 'test': test_loader}
-    return {'train': train_loader, 'test': test_loader}
 
 def load_mnist(configs):
     # transform for the training data
@@ -145,5 +144,4 @@ def load_mnist(configs):
     print(train_set.data.shape)
     print(test_set.data.shape)
 
-    return {'train': train_loader, 'test': test_loader}
     return {'train': train_loader, 'test': test_loader}

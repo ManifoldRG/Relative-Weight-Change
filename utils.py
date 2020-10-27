@@ -81,8 +81,14 @@ def load_model(model_name, training_type, configs):
 
         print("Loading Vanilla")
 
-        model = VanillaCNN2()
+        if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+                model = VanillaCNN2(num_classes=10, input_channels=1)
 
+            elif configs.dataset == "CIFAR-100":
+                model = VanillaCNN2(num_classes=100, input_channels=3)
+
+            else:
+                model = VanillaCNN2(num_classes=10, input_channels=3)
     else:
 
         print("Please provide a model")
