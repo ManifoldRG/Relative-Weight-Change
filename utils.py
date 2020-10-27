@@ -5,7 +5,7 @@ import torch
 from resnet import ResNet18
 from xception import Xception, xception
 from vanilla import VanillaCNN2
-import vgg
+from vgg import vgg19_bn
 
 
 def load_model(model_name, training_type, configs):
@@ -75,14 +75,21 @@ def load_model(model_name, training_type, configs):
 
             print("Loading untrained VGG19")
 
-            model = vgg.__dict__['vgg19_bn'](num_classes=10)
+            if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+
+                model = vgg19_bn(in_channels=1, num_classes=10)
+
+            elif configs.dataset == "CIFAR-100":
+                model = vgg19_bn(in_channels=3, num_classes=100)
+            else:
+                model = vgg19_bn(in_channels=3, num_classes=10)
 
     elif model_name == "Vanilla":
 
         print("Loading Vanilla")
 
         if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
-                model = VanillaCNN2(num_classes=10, input_channels=1)
+            model = VanillaCNN2(num_classes=10, input_channels=1)
 
         elif configs.dataset == "CIFAR-100":
             model = VanillaCNN2(num_classes=100, input_channels=3)
