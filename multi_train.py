@@ -1,5 +1,5 @@
 import numpy as np
-import json
+import pickle
 from comet_ml import Experiment
 from types import SimpleNamespace
 from main import run_experiment
@@ -27,8 +27,8 @@ def multi_train(configs_path="./configs.json"):
         # np.save(f"{configs.save_directory}{configs.exp_name}_test_arr", test_acc_arr)
         # save rmae dict
         
-        with open(f"{configs.save_directory}{configs.exp_name}_rmae", 'w') as fp:
-            json.dump(rmae_dict, fp)
+        with open(f"{configs.save_directory}{configs.exp_name}_rmae.pkl", 'wb') as f:
+            pickle.dump(rmae_dict, f, pickle.HIGHEST_PROTOCOL)
 
         for layer in rmae_dict:
             if layer not in average_rmae_dict:
