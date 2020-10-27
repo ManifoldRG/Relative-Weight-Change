@@ -1,13 +1,17 @@
+import random
+
+import torch
+import numpy as np
 import torch.nn as nn
 import torch.optim as optim
-import random
-import numpy as np
-import torch
+from comet_ml import Experiment
+
 from train import training
+from utils import load_model
 from data import load_dataset
 from delta import setup_delta_tracking
-from utils import load_model
-from comet_ml import Experiment
+
+
 
 
 def run_experiment(epochs, model_name, training_type, configs):
