@@ -21,7 +21,7 @@ def multi_train(configs_path="./configs.json"):
         print(f"Training: {configs.exp_name}")
         
         configs.seed = seed
-        rmae_dict, train_acc_arr, test_acc_arr = run_experiment(configs.epochs, configs.model_name, "no_pretrain", configs)
+        rmae_dict, train_acc_arr, test_acc_arr = run_experiment(configs.epochs, configs.model_name, "untrained", configs)
 
         # np.save(f"{configs.save_directory}{configs.exp_name}_train_arr", train_acc_arr)
         # np.save(f"{configs.save_directory}{configs.exp_name}_test_arr", test_acc_arr)
