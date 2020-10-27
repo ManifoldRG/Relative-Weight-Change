@@ -52,11 +52,10 @@ def multi_train(configs_path="./configs.json"):
                             project_name="avg-exp-rwc", workspace="ayushm-agrawal")
     experiment.set_name(f"avg_{og_config_exp_name}")
 
-    for i in range(len(average_train_acc)):
-
-        experiment.log_metric("Train Acc", average_train_acc[i], epoch=i+1)
-        experiment.log_metric("Test Acc", average_test_acc[i], epoch=i+1)
-    
+    for layer in average_rmae_dict:
+        for i in range(len(average_rmae_dict[layer])):
+            experiment.log_metric(layer, average_rmae_dict[layer][i], epoch=i+1)
+        
     experiment.end()
 
     print("Done!")
