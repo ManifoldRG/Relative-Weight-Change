@@ -29,7 +29,7 @@ def load_model(model_name, training_type, configs):
             else:
                 model = ResNet18(num_classes=10, input_channels=3)
 
-    elif model == "Xception":
+    elif model_name == "Xception":
         # load model with pretrained weights
         if training_type == "pretrained":
 
