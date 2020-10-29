@@ -53,8 +53,8 @@ class VanillaCNN2(nn.Module):
 
         # print(x.size())
 
-        x = self.linear(x)
-        x = self.linear1(x)
+        x = F.relu(self.linear(x))
+        x = F.relu(self.linear1(x))
         output = self.linear2(x)
 
         return output
