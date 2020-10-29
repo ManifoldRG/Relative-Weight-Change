@@ -53,9 +53,9 @@ def multi_train(configs_path="./configs.json"):
     experiment.set_name(f"avg_{og_config_exp_name}")
 
     for layer in average_rmae_dict:
-        for i in range(len(average_rmae_dict[layer])):
-            experiment.log_metric(layer, average_rmae_dict[layer][i], epoch=i+1)
-        
+        for idx, val in enumerate(average_rmae_dict[layer]):
+            experiment.log_metric(layer, val, epoch=idx+1)
+
     experiment.end()
 
     print("Done!")
