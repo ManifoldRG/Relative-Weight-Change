@@ -1,7 +1,7 @@
+from comet_ml import Experiment
 import numpy as np
 import pickle
 import json
-from comet_ml import Experiment
 from types import SimpleNamespace
 from main import run_experiment
 
