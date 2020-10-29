@@ -1,10 +1,11 @@
+
+from comet_ml import Experiment
 import random
 
 import torch
 import numpy as np
 import torch.nn as nn
 import torch.optim as optim
-from comet_ml import Experiment
 
 from train import training
 from utils import load_model
