@@ -6,6 +6,7 @@ from resnet import ResNet18
 from xception import Xception, xception
 from vanilla import VanillaCNN2
 from vgg import vgg19_bn
+from alexnet import Alexnet
 
 
 def load_model(model_name, training_type, configs):
@@ -96,6 +97,20 @@ def load_model(model_name, training_type, configs):
 
         else:
             model = VanillaCNN2(num_classes=10, input_channels=3)
+
+    elif model_name == "Alexnet":
+
+        print("Loading Alexnet")
+
+        if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+            model = Alexnet(num_classes=10, input_channels=1)
+
+        elif configs.dataset == "CIFAR-100":
+            model = Alexnet(num_classes=100, input_channels=3)
+
+        else:
+            model = Alexnet(num_classes=10, input_channels=3)
+
     else:
 
         print("Please provide a model")

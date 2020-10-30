@@ -40,23 +40,23 @@ def multi_train(configs_path="./configs.json"):
         # average_train_acc += train_acc_arr
         # average_test_acc += test_acc_arr
         
-    for layer in average_rmae_dict:
-        average_rmae_dict[layer] /= 5
+    # for layer in average_rmae_dict:
+    #     average_rmae_dict[layer] /= 5
 
     # average_train_acc /= len(configs.seed_list)
     # average_test_acc /= len(configs.seed_list)
     
-    print("Updating Average Results")
+    # print("Updating Average Results")
 
-    experiment = Experiment(api_key="y8YtCd3TVO7TurC3t1D0LP7Ju",
-                            project_name="avg-exp-rwc", workspace="ayushm-agrawal")
-    experiment.set_name(f"avg_{og_config_exp_name}")
+    # experiment = Experiment(api_key="y8YtCd3TVO7TurC3t1D0LP7Ju",
+    #                         project_name="avg-exp-rwc", workspace="ayushm-agrawal")
+    # experiment.set_name(f"avg_{og_config_exp_name}")
 
-    for layer in average_rmae_dict:
-        for idx, val in enumerate(average_rmae_dict[layer]):
-            experiment.log_metric(layer, val, epoch=idx+1)
+    # for layer in average_rmae_dict:
+    #     for idx, val in enumerate(average_rmae_dict[layer]):
+    #         experiment.log_metric(layer, val, epoch=idx+1)
 
-    experiment.end()
+    # experiment.end()
 
     print("Done!")
     
