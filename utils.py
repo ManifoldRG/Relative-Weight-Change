@@ -103,13 +103,13 @@ def load_model(model_name, training_type, configs):
         print("Loading Alexnet")
 
         if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
-            model = Alexnet(num_classes=10, input_channels=1)
+            model = AlexNet(num_classes=10, input_channels=1)
 
         elif configs.dataset == "CIFAR-100":
-            model = Alexnet(num_classes=100, input_channels=3)
+            model = AlexNet(num_classes=100, input_channels=3)
 
         else:
-            model = Alexnet(num_classes=10, input_channels=3)
+            model = AlexNet(num_classes=10, input_channels=3)
 
     else:
 
