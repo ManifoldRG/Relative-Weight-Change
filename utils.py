@@ -6,7 +6,7 @@ from resnet import ResNet18
 from xception import Xception, xception
 from vanilla import VanillaCNN2
 from vgg import vgg19_bn
-from alexnet import Alexnet
+from alexnet import AlexNet
 
 
 def load_model(model_name, training_type, configs):
