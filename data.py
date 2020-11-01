@@ -121,11 +121,13 @@ def load_fashionmnist(configs):
 def load_mnist(configs):
     # transform for the training data
     train_transforms = transforms.Compose([
+        transforms.Resize((32, 32)),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
     ])
 
     test_transforms = transforms.Compose([
+        transforms.Resize((32, 32)),
         transforms.ToTensor(),
     ])
 
