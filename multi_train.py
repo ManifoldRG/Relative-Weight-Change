@@ -31,11 +31,11 @@ def multi_train(configs_path="./configs.json"):
         with open(f"{configs.save_directory}{configs.exp_name}_rmae.pkl", 'wb') as f:
             pickle.dump(rmae_dict, f, pickle.HIGHEST_PROTOCOL)
 
-        for layer in rmae_dict:
-            if layer not in average_rmae_dict:
-                average_rmae_dict[layer]  = np.array(rmae_dict[layer])
-            else:
-                average_rmae_dict[layer] += np.array(rmae_dict[layer])
+        # for layer in rmae_dict:
+        #     if layer not in average_rmae_dict:
+        #         average_rmae_dict[layer]  = np.array(rmae_dict[layer])
+        #     else:
+        #         average_rmae_dict[layer] += np.array(rmae_dict[layer])
 
         # average_train_acc += train_acc_arr
         # average_test_acc += test_acc_arr
