@@ -50,9 +50,9 @@ class VGG(nn.Module):
                 m.bias.data.zero_()
 
 
-def make_layers(cfg, batch_norm=False):
+def make_layers(cfg, in_channels=3, batch_norm=False):
     layers = []
-    in_channels = 3
+    in_channels = in_channels
     for v in cfg:
         if v == 'M':
             layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
@@ -128,8 +128,9 @@ def vgg19(**kwargs):
     return model
 
 
-def vgg19_bn(**kwargs):
+def vgg19_bn(in_channels=3, **kwargs):
     print("Loading VGG19_BN")
     """VGG 19-layer model (configuration 'E') with batch normalization"""
-    model = VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
+    model = VGG(make_layers(
+        cfg['E'], in_channels=in_channels, batch_norm=True), **kwargs)
     return model

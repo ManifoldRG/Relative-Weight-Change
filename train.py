@@ -2,21 +2,18 @@ import torch
 import numpy as np
 
 from delta import compute_delta
+from utils import freeze_resnet_1, freeze_resnet_2
 
 
-def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list,
-             mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names, training_type, configs, experiment):
+def training(epochs, loaders, model, optimizer, criterion, prev_list,
+             rmae_delta_dict, configs, experiment):
     """
     Performs training and evaluation.
     """
 
-    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
-                                                        milestones=configs.lr_sched_milestone, gamma=0.1)
-
-    # lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(
-    #     optimizer, max_lr=configs.lr, steps_per_epoch=len(loaders['train'])//configs.batch_size, epochs=epochs)
-
     min_test_loss = np.Inf
+
+    train_acc_arr, test_acc_arr = [], []
 
     for epoch in range(1, epochs+1):
 
@@ -60,8 +57,23 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
         experiment.log_metric("Train Loss", train_loss, epoch=epoch)
 
         # compute layer deltas after epoch.
-        mse_delta_dict, mae_delta_dict, rmae_delta_dict, prev_list = compute_delta(model, model_name,
-                                                                                   layer_names, prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, training_type, experiment, epoch)
+        rmae_delta_dict, prev_list = compute_delta(model, prev_list, rmae_delta_dict, experiment, epoch)
+
+        if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
+            if configs.freezing_type == 1 and epoch == 3:
+                freeze_resnet_1(model)
+            
+            if configs.freezing_type == 2:
+                if epoch == 3 or epoch == 5:
+                    freeze_resnet_2(model, epoch)
+        
+        else:
+            if configs.freezing_type == 1 and epoch == 10:
+                freeze_resnet_1(model)
+            
+            if configs.freezing_type == 2:
+                if epoch == 20 or epoch == 40:
+                    freeze_resnet_2(model, epoch)
 
         model.eval()
         with torch.no_grad():
@@ -92,11 +104,12 @@ def training(epochs, loaders, model, model_name, optimizer, criterion, prev_list
         experiment.log_metric("Test Acc", test_acc, epoch=epoch)
         experiment.log_metric("Test Loss", test_loss, epoch=epoch)
 
+        train_acc_arr.append(train_acc)
+        test_acc_arr.append(test_acc)
+
         print(
             f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Acc: {train_acc}% \tTest Loss: {test_loss} \tTest Acc: {test_acc}%")
         if float(test_acc) >= configs.target_val_acc:
             break
 
-        lr_scheduler.step()
-
-    return mse_delta_dict, mae_delta_dict, rmae_delta_dict
+    return rmae_delta_dict, np.asarray(train_acc_arr), np.asarray(test_acc_arr)

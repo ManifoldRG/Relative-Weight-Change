@@ -1,24 +1,29 @@
+
+from comet_ml import Experiment
+import random
+
+import torch
+import numpy as np
 import torch.nn as nn
 import torch.optim as optim
-import random
-import numpy as np
-import torch
+
 from train import training
-from data import load_cifar10
-from delta import setup_delta_tracking
 from utils import load_model
-from comet_ml import Experiment
+from data import load_dataset
+from delta import setup_delta_tracking
 
 
-def run_experiment(epochs, model_name, training_type, configs, exp_name):
+
+
+def run_experiment(epochs, model_name, training_type, configs):
     """ Runs the basic experiment"""
 
     print(epochs, "CONFIGS: ", configs)
 
-    experiment = Experiment(api_key="ZgD8zJEiZErhwIzPMfZpitMjq",
-                            project_name="relative-weight-change", workspace="ayushm-agrawal")
+    experiment = Experiment(api_key=configs.api_key,
+                            project_name=configs.project_name, workspace="ayushm-agrawal")
 
-    experiment.set_name(exp_name)
+    experiment.set_name(configs.exp_name)
 
     experiment.log_parameters(configs)
 
@@ -32,10 +37,10 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
     torch.backends.cudnn.benchmark = False
 
     # load data
-    loaders = load_cifar10(configs)
+    loaders = load_dataset(configs)
 
     # load model
-    model = load_model(model_name, training_type)
+    model = load_model(model_name, training_type, configs)
 
     # loss
     criterion = nn.CrossEntropyLoss().cuda()
@@ -46,15 +51,11 @@ def run_experiment(epochs, model_name, training_type, configs, exp_name):
                           weight_decay=configs.weight_decay)
 
     # get tracking dictionaries
-    prev_list, mse_delta_dict, mae_delta_dict, rmae_delta_dict, layer_names = setup_delta_tracking(
-        model, model_name, training_type)
+    prev_list, rmae_delta_dict = setup_delta_tracking(model)
 
     # train model
-    mse_delta_dict, mae_delta_dict, rmae_delta_dict = training(epochs, loaders, model, model_name,
-                                                               optimizer, criterion, prev_list,
-                                                               mse_delta_dict, mae_delta_dict,
-                                                               rmae_delta_dict, layer_names, training_type, configs, experiment)
+    rmae_delta_dict, train_acc_arr, test_acc_arr = training(epochs, loaders, model, optimizer, criterion, prev_list, rmae_delta_dict, configs, experiment)
 
     experiment.end()
 
-    return mse_delta_dict, mae_delta_dict, rmae_delta_dict
+    return rmae_delta_dict, train_acc_arr, test_acc_arr
