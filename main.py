@@ -1,5 +1,3 @@
-
-from comet_ml import Experiment
 import random
 
 import torch
@@ -8,24 +6,15 @@ import torch.nn as nn
 import torch.optim as optim
 
 from train import training
-from utils import load_model
-from data import load_dataset
-from delta import setup_delta_tracking
-
-
+from utils.data import load_dataset
+from utils.delta import setup_delta_tracking
+from utils.helpers import load_model
 
 
 def run_experiment(epochs, model_name, training_type, configs):
     """ Runs the basic experiment"""
 
     print(epochs, "CONFIGS: ", configs)
-
-    experiment = Experiment(api_key=configs.api_key,
-                            project_name=configs.project_name, workspace="ayushm-agrawal")
-
-    experiment.set_name(configs.exp_name)
-
-    experiment.log_parameters(configs)
 
     # set seed for reproducibility.
     seed = configs.seed
@@ -51,11 +40,10 @@ def run_experiment(epochs, model_name, training_type, configs):
                           weight_decay=configs.weight_decay)
 
     # get tracking dictionaries
-    prev_list, rmae_delta_dict = setup_delta_tracking(model)
+    model_weights, layer_dict = setup_delta_tracking(model)
 
     # train model
-    rmae_delta_dict, train_acc_arr, test_acc_arr = training(epochs, loaders, model, optimizer, criterion, prev_list, rmae_delta_dict, configs, experiment)
-
-    experiment.end()
+    rmae_delta_dict, train_acc_arr, test_acc_arr = training(
+        epochs, loaders, model, optimizer, criterion, model_weights, layer_dict, configs)
 
     return rmae_delta_dict, train_acc_arr, test_acc_arr

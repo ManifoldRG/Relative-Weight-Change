@@ -1,0 +1,19 @@
+{
+    "epochs": 150,
+    "exp_name": "RMAE_Alexnet_CIFAR10",
+    "seed_list": [
+        0,
+        42,
+        123,
+        1000,
+        1234
+    ],
+    "model_name": "Alexnet",
+    "dataset": "CIFAR-10",
+    "lr": 0.001,
+    "momentum": 0.9,
+    "weight_decay": 1e-4,
+    "batch_size": 128,
+    "target_val_acc": 94.0,
+    "freezing_type": 0
+}
