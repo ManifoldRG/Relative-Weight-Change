@@ -1,12 +1,11 @@
 import torch
 import numpy as np
 
-from delta import compute_delta
-from utils import freeze_resnet_1, freeze_resnet_2
+from utils.delta import compute_delta
 
 
 def training(epochs, loaders, model, optimizer, criterion, prev_list,
-             rmae_delta_dict, configs, experiment):
+             rmae_delta_dict, configs):
     """
     Performs training and evaluation.
     """
@@ -53,27 +52,10 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
 
         train_loss = round(train_loss/len(loaders['train'].dataset), 4)
         train_acc = round(((train_correct/train_total) * 100.0), 4)
-        experiment.log_metric("Train Acc", train_acc, epoch=epoch)
-        experiment.log_metric("Train Loss", train_loss, epoch=epoch)
 
         # compute layer deltas after epoch.
-        rmae_delta_dict, prev_list = compute_delta(model, prev_list, rmae_delta_dict, experiment, epoch)
-
-        if configs.dataset == "MNIST" or configs.dataset == "FashionMNIST":
-            if configs.freezing_type == 1 and epoch == 3:
-                freeze_resnet_1(model)
-            
-            if configs.freezing_type == 2:
-                if epoch == 3 or epoch == 5:
-                    freeze_resnet_2(model, epoch)
-        
-        else:
-            if configs.freezing_type == 1 and epoch == 10:
-                freeze_resnet_1(model)
-            
-            if configs.freezing_type == 2:
-                if epoch == 20 or epoch == 40:
-                    freeze_resnet_2(model, epoch)
+        rmae_delta_dict, prev_list = compute_delta(
+            model, prev_list, rmae_delta_dict, epoch)
 
         model.eval()
         with torch.no_grad():
@@ -101,8 +83,6 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
 
         test_loss = round(test_loss/len(loaders['test'].dataset), 4)
         test_acc = round(((test_correct/test_total) * 100), 4)
-        experiment.log_metric("Test Acc", test_acc, epoch=epoch)
-        experiment.log_metric("Test Loss", test_loss, epoch=epoch)
 
         train_acc_arr.append(train_acc)
         test_acc_arr.append(test_acc)
