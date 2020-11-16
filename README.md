@@ -84,6 +84,15 @@ Layer-Wise-Learning-Trends-PyTorch
 └── configs.json
 ```
 
+#### Citation
+@misc{agrawal2020investigating,
+      title={Investigating Learning in Deep Neural Networks using Layer-Wise Weight Change}, 
+      author={Ayush Manish Agrawal and Atharva Tendle and Harshvardhan Sikka and Sahib Singh and Amr Kayid},
+      year={2020},
+      eprint={2011.06735},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
 
 ## Acknowledgement 
 - This README.md is inspired from [rahulvigneswaran/Lottery_Ticket_Hypothsis](https://github.com/rahulvigneswaran/Lottery-Ticket-Hypothesis-in-Pytorch)
