@@ -13,6 +13,9 @@ def multi_train(configs_path="./configs.json"):
     configs = SimpleNamespace(**json.load(open(configs_path)))
     print(configs)
 
+    experiment = Experiment(project_name="imagenet-rwc")
+    experiment.log_parameters(configs)
+
     average_rmae_dict, average_train_acc, average_test_acc = {
     }, np.zeros(configs.epochs), np.zeros(configs.epochs)
 

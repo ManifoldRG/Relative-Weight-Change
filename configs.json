@@ -10,5 +10,6 @@
     "batch_size": 256,
     "target_val_acc": 94.0,
     "arr_save_path": "/home/shared/results/",
-    "num_workers": 8
+    "num_workers": 8,
+    "data_path": "/home/shared/imagenet"
 }
