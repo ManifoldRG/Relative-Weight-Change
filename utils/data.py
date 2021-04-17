@@ -156,7 +156,9 @@ def load_mnist(configs):
 def load_imagenet(configs):
     # transform for the training data
     train_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(224),
+        transforms.Resize(224), # resize
+        transforms.CenterCrop(224), # center crop
+        transforms.RandomCrop(224), # random crop
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -164,6 +166,8 @@ def load_imagenet(configs):
     ])
 
     val_transforms = transforms.Compose([
+        transforms.Resize(224), # resize
+        transforms.CenterCrop(224), # center crop
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                              std=[0.229, 0.224, 0.225]),
