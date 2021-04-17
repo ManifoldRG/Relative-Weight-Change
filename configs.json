@@ -7,9 +7,9 @@
     "model_name": "resnet101",
     "dataset": "ImageNet",
     "lr": 0.001,
-    "batch_size": 256,
+    "batch_size": 512,
     "target_val_acc": 94.0,
     "arr_save_path": "/home/shared/results/",
-    "num_workers": 8,
+    "num_workers": 4,
     "data_path": "/home/shared/imagenet"
 }

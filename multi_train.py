@@ -34,6 +34,7 @@ def multi_train(configs_path="./configs.json"):
         print(f"Training: {configs.exp_name}")
 
         configs.seed = seed
+        configs.experiment = experiment
         rmae_dict, train_acc_arr, test_acc_arr = run_experiment(
             configs.epochs, configs.model_name, "untrained", configs)
 
