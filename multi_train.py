@@ -3,6 +3,7 @@ from os.path import join
 from types import SimpleNamespace
 
 import numpy as np
+from comet_ml import Experiment
 
 from main import run_experiment
 
