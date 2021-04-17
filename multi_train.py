@@ -1,4 +1,5 @@
 import json
+import os
 from os.path import join
 from types import SimpleNamespace
 
@@ -10,6 +11,8 @@ from main import run_experiment
 
 def multi_train(configs_path="./configs.json"):
 
+    configs_path = join(os.getcwd(), "configs.json")
+    print(f"Configs Path: {configs_path}")
     configs = SimpleNamespace(**json.load(open(configs_path)))
     print(configs)
 
