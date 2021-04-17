@@ -1,7 +1,7 @@
 import random
 
-import torch
 import numpy as np
+import torch
 import torch.nn as nn
 import torch.optim as optim
 
@@ -35,9 +35,10 @@ def run_experiment(epochs, model_name, training_type, configs):
     criterion = nn.CrossEntropyLoss().cuda()
 
     # optimizer
-    optimizer = optim.SGD(model.parameters(), configs.lr,
-                          momentum=configs.momentum,
-                          weight_decay=configs.weight_decay)
+    # optimizer = optim.SGD(model.parameters(), configs.lr,
+    #                       momentum=configs.momentum,
+    #                       weight_decay=configs.weight_decay)
+    optimizer = optim.Adam(model.parameters(), configs.lr)
 
     # get tracking dictionaries
     model_weights, layer_dict = setup_delta_tracking(model)

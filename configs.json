@@ -1,18 +1,14 @@
 {
     "epochs": 150,
-    "exp_name": "RMAE_Alexnet_CIFAR10",
+    "exp_name": "ResNet-101-ImageNet",
     "seed_list": [
-        0,
-        42,
-        123,
-        1000,
-        1234
+        420
     ],
-    "model_name": "Alexnet",
-    "dataset": "CIFAR-10",
+    "model_name": "resnet101",
+    "dataset": "ImageNet",
     "lr": 0.001,
-    "momentum": 0.9,
-    "weight_decay": 1e-4,
-    "batch_size": 128,
-    "target_val_acc": 94.0
+    "batch_size": 256,
+    "target_val_acc": 94.0,
+    "arr_save_path": "/home/shared/results/",
+    "num_workers": 8
 }

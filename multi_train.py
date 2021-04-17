@@ -1,6 +1,9 @@
-import numpy as np
 import json
+from os.path import join
 from types import SimpleNamespace
+
+import numpy as np
+
 from main import run_experiment
 
 
@@ -33,10 +36,17 @@ def multi_train(configs_path="./configs.json"):
         average_test_acc += test_acc_arr
 
     for layer in average_rmae_dict:
-        average_rmae_dict[layer] /= 5
+        average_rmae_dict[layer] /= len(configs.seed)
 
     average_train_acc /= len(configs.seed_list)
     average_test_acc /= len(configs.seed_list)
+
+    save_path = join(configs.arr_save_path, og_config_exp_name)
+    print(f"Saving Arrays at {save_path}")
+
+    np.save(save_path + "avg_train_acc.npy", average_train_acc)
+    np.save(save_path + "avg_test_acc.npy", average_test_acc)
+    np.save(save_path + "avg_rmae_dict.npy", average_rmae_dict)
 
     print("Done!")
 
