@@ -62,7 +62,7 @@ def load_model(model_name, training_type, configs):
 
             model = vgg19_bn(in_channels=configs.input_channels,
                              num_classes=configs.num_classes)
-    elif model_name = "resnet101":
+    elif model_name == "resnet101":
         if training_type == 'pretrained':
             print("Loading pretrained ResNet-101")
 

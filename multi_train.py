@@ -13,7 +13,11 @@ def multi_train(configs_path="./configs.json"):
     configs = SimpleNamespace(**json.load(open(configs_path)))
     print(configs)
 
-    experiment = Experiment(project_name="imagenet-rwc")
+    experiment = Experiment(
+        api_key="ZgD8zJEiZErhwIzPMfZpitMjq",
+        project_name="imagenet-rwc",
+        workspace="ayushm-agrawal",
+    )
     experiment.log_parameters(configs)
 
     average_rmae_dict, average_train_acc, average_test_acc = {
