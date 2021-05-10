@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 from utils.delta import compute_delta
+from utils.helpers import accuracy
 
 
 def training(epochs, loaders, model, optimizer, criterion, prev_list,
@@ -23,6 +24,7 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
             test_correct = 0.0
             test_total = 0.0
             test_loss = 0.0
+            train_top1, train_top5 = [], []
 
             # train the model
             model.train()
@@ -36,6 +38,12 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
                 output = model(data)
                 # calculate the loss
                 loss = criterion(output, labels)
+
+                # measure top-k accuracy for training.
+                top1, top5 = accuracy(output, labels, topk=(1, 5))
+                train_top1.append(top1)
+                train_top5.append(top5)
+
                 # backprop
                 loss.backward()
                 # optimize the weights
@@ -54,12 +62,21 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
             train_loss = round(train_loss/len(loaders['train'].dataset), 4)
             train_acc = round(((train_correct/train_total) * 100.0), 4)
 
+            # epoch top k
+            epoch_train_t1 = torch.mean(torch.stack(train_top1)).cpu()
+            epoch_train_t5 = torch.mean(torch.stack(train_top5)).cpu()
+ 
             configs.experiment.log_metric("accuracy", train_acc, step=epoch)
+            configs.experiment.log_metric("top-1", epoch_train_t1, step=epoch)
+            configs.experiment.log_metric("top-5", epoch_train_t5, step=epoch)
             configs.experiment.log_metric("loss", train_loss, step=epoch)
 
             # compute layer deltas after epoch.
             rmae_delta_dict, prev_list = compute_delta(
                 model, prev_list, rmae_delta_dict)
+
+
+            test_top1, test_top5 = [], []
 
             with configs.experiment.test():
                 model.eval()
@@ -70,6 +87,11 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
 
                         output = model(data)
                         loss = criterion(output, labels)
+
+                        # measure top-k accuracy for test.
+                        top1, top5 = accuracy(output, labels, topk=(1, 5))
+                        test_top1.append(top1)
+                        test_top5.append(top5)
 
                         test_loss += loss.item()*data.size(0)
 
@@ -89,14 +111,22 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
                 test_loss = round(test_loss/len(loaders['test'].dataset), 4)
                 test_acc = round(((test_correct/test_total) * 100), 4)
 
+                # epoch top k
+                epoch_test_t1 = torch.mean(torch.stack(test_top1)).cpu()
+                epoch_test_t5 = torch.mean(torch.stack(test_top5)).cpu()
+
                 configs.experiment.log_metric("accuracy", test_acc, step=epoch)
+                configs.experiment.log_metric("top-1", epoch_test_t1, step=epoch)
+                configs.experiment.log_metric("top-5", epoch_test_t5, step=epoch)
                 configs.experiment.log_metric("loss", test_loss, step=epoch)
 
                 train_acc_arr.append(train_acc)
                 test_acc_arr.append(test_acc)
 
                 print(
-                    f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Acc: {train_acc}% \tTest Loss: {test_loss} \tTest Acc: {test_acc}%")
+                    f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Top-1: {epoch_train_t1} \tTrain Top-5: {epoch_train_t5}% 
+                    \tTest Loss: {test_loss} \tTest Top-1: {epoch_test_t1} \tTest Top-5: {epoch_test_t5}%")
+
                 if float(test_acc) >= configs.target_val_acc:
                     break
 
