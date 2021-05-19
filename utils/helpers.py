@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 import torchvision
-from models.alexnet import AlexNet
-from models.resnet import ResNet18
+from models.resnet import ResNet18, ResNet50
 from models.vgg import vgg19_bn
+from models.efficientnet import load_efficientnet
 
 
 def accuracy(output, target, topk=(1,)):
@@ -49,17 +49,40 @@ def load_model(model_name, training_type, configs):
         if training_type == "pretrained":
             print("Loading pretrained Resnet18")
             model = torchvision.models.resnet18(pretrained=True)
-            model.fc.Linear = nn.Linear(model.fc.in_features, 10)
+            model.fc.Linear = nn.Linear(model.fc.in_features, configs.num_classes)
 
         elif training_type == "untrained":
             print("Loading untrained Resnet18")
             model = ResNet18(num_classes=configs.num_classes,
                              input_channels=configs.input_channels)
+    elif  model_name == "Resnet50":
+        # load weights
+        if training_type == "pretrained":
+            print(f"Loading pretrained {model_name}")
+            model = torchvision.models.resnet50(pretrained=True)
+            model.fc.Linear = nn.Linear(model.fc.in_features, configs.num_classes)
+
+        elif training_type == "untrained":
+            print(f"Loading untrained {model_name}")
+            model = ResNet50(num_classes=configs.num_classes,
+                             input_channels=configs.input_channels)
+
+    
+    elif model_name == "Resnet101":
+        if training_type == 'pretrained':
+            print(f"Loading pretrained {model_name}")
+
+            model = torchvision.models.resnet101(pretrained=True)
+        elif training_type ==  "untrained":
+            print(f"Loading untrained {model_name}")
+
+            model = torchvision.models.resnet101()
+
     elif model_name == "VGG19":
         # load weights
         if training_type == "pretrained":
 
-            print("Loading pretrained VGG19")
+            print(f"Loading pretrained {model_name}")
 
             model = torchvision.models.vgg19(pretrained=True)
             model.classifier = nn.Sequential(
@@ -75,19 +98,22 @@ def load_model(model_name, training_type, configs):
             )
         elif training_type == "untrained":
 
-            print("Loading untrained VGG19")
+            print(f"Loading untrained {model_name}")
 
             model = vgg19_bn(in_channels=configs.input_channels,
                              num_classes=configs.num_classes)
-    elif model_name == "resnet101":
+
+    elif model_name.startswith("EfficientNet"):
+
         if training_type == 'pretrained':
-            print("Loading pretrained ResNet-101")
+            print(f"Loading pretrained {model_name}")
 
-            model = torchvision.models.resnet101(pretrained=True)
+            model = load_efficientnet(model_name, configs.num_classes, configs.input_channels, True)
+
         elif training_type ==  "untrained":
-            print("Loading untrained ResNet101")
+            print(f"Loading untrained {model_name}")
 
-            model = torchvision.models.resnet101()
+            model = load_efficientnet(model_name, configs.num_classes, configs.input_channels, False)
     else:
         print("Please provide a model")
 

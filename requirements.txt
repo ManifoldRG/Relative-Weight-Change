@@ -122,3 +122,4 @@ wincertstore==0.2
 wrapt==1.11.2
 wurlitzer==2.0.1
 zipp==2.1.0
+timm==0.4.9
