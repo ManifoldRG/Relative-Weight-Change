@@ -3,7 +3,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torchvision import datasets
-from torchvision.datasets import CIFAR10, CIFAR100, MNIST, FashionMNIST
+from torchvision.datasets import CIFAR10, CIFAR100, MNIST, FashionMNIST, SVHN
 
 
 def load_dataset(configs):
@@ -12,6 +12,8 @@ def load_dataset(configs):
         return load_mnist(configs)
     elif dataset == "fashionmnist":
         return load_fashionmnist(configs)
+    elif dataset == "svhn":
+        return load_svhn(configs)
     elif dataset == "cifar-10":
         return load_cifar10(configs)
     elif dataset == "cifar-100":
@@ -88,6 +90,42 @@ def load_cifar100(configs):
     print(test_set.data.shape)
 
     return {'train': train_loader, 'test': test_loader}
+
+def load_cifar100(configs):
+    # transform for the training data
+    train_transforms = transforms.Compose([
+        transforms.RandomCrop(32),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225]),
+    ])
+
+    test_transforms = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225]),
+    ])
+
+    # load datasets, downloading if needed
+    train_set = SVHN('./data/svhn', split="train", download=True,
+                        transform=train_transforms)
+    test_set = SVHN('./data/svhn', split="test", download=True,
+                       transform=test_transforms)
+
+    train_loader = torch.utils.data.DataLoader(
+        train_set, batch_size=configs.batch_size, num_workers=0)
+    test_loader = torch.utils.data.DataLoader(
+        test_set, batch_size=configs.batch_size, num_workers=0)
+
+    print('Number of iterations required to get through training data of length {}: {}'.format(
+        len(train_set), len(train_loader)))
+
+    print(train_set.data.shape)
+    print(test_set.data.shape)
+
+    return {'train': train_loader, 'test': test_loader}
+
 
 def load_fashionmnist(configs):
     # transform for the training data
