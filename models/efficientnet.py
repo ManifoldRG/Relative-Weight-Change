@@ -2,7 +2,7 @@ import torch
 import timm
 
 
-def load_efficientnet(model_name, num_classes=1000, input_channels=3, pretrained=False, ):
+def load_efficientnet(model_name="tf_efficientnet_b4", num_classes=1000, input_channels=3, pretrained=False):
 
     model = timm.create_model(
         model_name,

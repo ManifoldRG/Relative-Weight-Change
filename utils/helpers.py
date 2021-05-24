@@ -103,7 +103,7 @@ def load_model(model_name, training_type, configs):
             model = vgg19_bn(in_channels=configs.input_channels,
                              num_classes=configs.num_classes)
 
-    elif model_name.startswith("EfficientNet"):
+    elif "efficientnet" in model_name:
 
         if training_type == 'pretrained':
             print(f"Loading pretrained {model_name}")
