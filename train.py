@@ -126,8 +126,7 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
                 test_acc_arr.append(test_acc)
 
                 print(
-                    f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Top-1: {epoch_train_t1} \tTrain Top-5: {epoch_train_t5}% 
-                    \tTest Loss: {test_loss} \tTest Top-1: {epoch_test_t1} \tTest Top-5: {epoch_test_t5}%")
+                    f"Epoch: {epoch} \tTrain Loss: {train_loss} \tTrain Top-1: {epoch_train_t1} \tTrain Top-5: {epoch_train_t5}% \tTest Loss: {test_loss} \tTest Top-1: {epoch_test_t1} \tTest Top-5: {epoch_test_t5}%")
 
                 # early stopping
                 # accumulate consecutive counters

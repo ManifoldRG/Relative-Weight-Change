@@ -11,7 +11,7 @@ from main import run_experiment
 
 def multi_train(configs_path="./configs.json"):
 
-    configs_path = "/home/shared/Layer-Wise-Learning-Trends-PyTorch/configs.json"
+    # configs_path = "/home/shared/Layer-Wise-Learning-Trends-PyTorch/configs.json"
     print(f"Configs Path: {configs_path}")
     configs = SimpleNamespace(**json.load(open(configs_path)))
     print(configs)
