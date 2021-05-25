@@ -48,7 +48,7 @@ def multi_train(configs_path="./configs.json"):
         average_test_acc += test_acc_arr
 
     for layer in average_rmae_dict:
-        average_rmae_dict[layer] /= len(configs.seed)
+        average_rmae_dict[layer] /= len(configs.seed_list)
 
     average_train_acc /= len(configs.seed_list)
     average_test_acc /= len(configs.seed_list)
