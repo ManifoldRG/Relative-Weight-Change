@@ -25,7 +25,8 @@ def load_dataset(configs):
 def load_cifar10(configs):
     # transform for the training data
     train_transforms = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
+        transforms.Resize(224),
+        # transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -33,6 +34,7 @@ def load_cifar10(configs):
     ])
 
     test_transforms = transforms.Compose([
+        transforms.Resize(224),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                              std=[0.229, 0.224, 0.225]),
@@ -59,7 +61,8 @@ def load_cifar10(configs):
 def load_cifar100(configs):
     # transform for the training data
     train_transforms = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
+        transforms.Resize(224),
+        # transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -67,6 +70,7 @@ def load_cifar100(configs):
     ])
 
     test_transforms = transforms.Compose([
+        transforms.Resize(224),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                              std=[0.229, 0.224, 0.225]),
@@ -94,7 +98,8 @@ def load_cifar100(configs):
 def load_svhn(configs):
     # transform for the training data
     train_transforms = transforms.Compose([
-        transforms.RandomCrop(32),
+        transforms.Resize(224),
+        # transforms.RandomCrop(32),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -102,6 +107,7 @@ def load_svhn(configs):
     ])
 
     test_transforms = transforms.Compose([
+        transforms.Resize(224),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                              std=[0.229, 0.224, 0.225]),
