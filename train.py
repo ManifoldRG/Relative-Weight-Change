@@ -79,7 +79,7 @@ def training(epochs, loaders, model, optimizer, criterion, prev_list,
 
             # save rmae dict
             save_path = join(configs.arr_save_path, configs.exp_name)
-            np.save(save_path + f"rmae_dict_{epoch}.npy", rmae_delta_dict)
+            np.save(save_path + f"_rmae_dict.npy", rmae_delta_dict)
 
             test_top1, test_top5 = [], []
 
