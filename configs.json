@@ -1,18 +1,17 @@
 {
-    "epochs": 150,
-    "exp_name": "RMAE_Alexnet_CIFAR10",
+    "epochs": 25,
+    "exp_name": "ResNet50-CIFAR100",
     "seed_list": [
-        0,
-        42,
-        123,
-        1000,
-        1234
+        420
     ],
-    "model_name": "Alexnet",
-    "dataset": "CIFAR-10",
+    "model_name": "Resnet50",
+    "dataset": "cifar-100",
     "lr": 0.001,
-    "momentum": 0.9,
-    "weight_decay": 1e-4,
     "batch_size": 128,
-    "target_val_acc": 94.0
+    "target_val_acc": 94.0,
+    "save_path": "./",
+    "tolerance": 5,
+    "arr_save_path": "/content/",
+    "num_workers": 4,
+    "data_path": "./"
 }
